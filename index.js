@@ -6,6 +6,7 @@ var piecePics=await loadPieceImages();
 const canvasLengthPercentage=0.98;
 var length=(window.innerWidth<window.innerHeight)?window.innerWidth*canvasLengthPercentage:window.innerHeight*canvasLengthPercentage;
 var chessBoard=new ChessBoard();
+var moves=[];
 wrapperDiv.style.marginLeft="auto";
 wrapperDiv.style.marginRight="auto";
 wrapperDiv.style.width=length;
@@ -24,15 +25,23 @@ printFieldOnCanvas(chessBoard.field);
 wrapperDiv.append(canvas);
 document.body.append(wrapperDiv);
 canvas.onclick=(e)=>{
-    printFieldOnCanvas(chessBoard.field);
     const rect = canvas.getBoundingClientRect();
     const x = parseInt((e.clientX - rect.left)/(length/8));
     const y = parseInt((e.clientY - rect.top)/(length/8));
+    for(var i=0;i<moves.length;i++){
+        if(x===moves[i].x && y===moves[i].y){
+            chessBoard.movePiece(moves[i]);
+            printFieldOnCanvas(chessBoard.field);
+            moves=[];
+            return;
+        }
+    }
     if(chessBoard.field[y][x]===null){
         console.log(x,y,chessBoard.field[y][x]);
     }else{
-        var moves=chessBoard.field[y][x].getPossibleMoves();
-        console.log(JSON.stringify(moves));
+        moves=chessBoard.field[y][x].getPossibleMoves();
+        printFieldOnCanvas(chessBoard.field);
+        console.log(moves);
         moves.forEach(move => {
             canvasContext.beginPath();
             canvasContext.arc(move.x*(length/8)+(length/16),move.y*(length/8)+(length/16),length/17,0,2*Math.PI);
