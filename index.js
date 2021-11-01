@@ -36,10 +36,10 @@ canvas.onclick=(e)=>{
             return;
         }
     }
-    if(chessBoard.field[y][x]===null){
-        console.log(x,y,chessBoard.field[y][x]);
+    if(chessBoard.field[x][y]===null){
+        console.log(x,y,chessBoard.field[x][y]);
     }else{
-        moves=chessBoard.field[y][x].getPossibleMoves();
+        moves=chessBoard.field[x][y].getPossibleMoves();
         printFieldOnCanvas(chessBoard.field);
         console.log(moves);
         moves.forEach(move => {
@@ -76,7 +76,7 @@ function printFieldOnCanvas(field){
                 canvasContext.fillStyle="white";
                 canvasContext.fillRect(j*(length/8),i*(length/8),(length/8),(length/8));
             }
-            var piece=(field[i][j]===null)?null:field[i][j].piece;
+            var piece=(field[j][i]===null)?null:field[j][i].piece;
             switch(piece){
                 case 'Bp':
                     canvasContext.drawImage(piecePics.Bpawn,j*(length/8),i*(length/8),(length/8),(length/8));
