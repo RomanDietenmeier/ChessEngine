@@ -24,13 +24,27 @@ printFieldOnCanvas(chessBoard.field);
 wrapperDiv.append(canvas);
 document.body.append(wrapperDiv);
 canvas.onclick=(e)=>{
+    printFieldOnCanvas(chessBoard.field);
     const rect = canvas.getBoundingClientRect();
     const x = parseInt((e.clientX - rect.left)/(length/8));
     const y = parseInt((e.clientY - rect.top)/(length/8));
     if(chessBoard.field[y][x]===null){
         console.log(x,y,chessBoard.field[y][x]);
     }else{
-        console.log(JSON.stringify(chessBoard.field[y][x].getPossibleMoves()));
+        var moves=chessBoard.field[y][x].getPossibleMoves();
+        console.log(JSON.stringify(moves));
+        moves.forEach(move => {
+            canvasContext.beginPath();
+            canvasContext.arc(move.x*(length/8)+(length/16),move.y*(length/8)+(length/16),length/17,0,2*Math.PI);
+            canvasContext.lineWidth=1;
+            canvasContext.strokeStyle='#003300';
+            canvasContext.stroke();
+        });
+        // ctx.beginPath();
+        // ctx.arc(x*100+50,y*100+50, 45, 0, 2 * Math.PI);
+        // ctx.lineWidth = 5;
+        // ctx.strokeStyle = '#003300';
+        // ctx.stroke(); 
     }
 }
 
@@ -46,8 +60,11 @@ window.onresize=(e)=>{
 function printFieldOnCanvas(field){
     for(var i=0;i<field.length;i++){
         for(var j=0;j<field[i].length;j++){
-            canvasContext.fillStyle="grey";
             if((i+j)%2==1){
+                canvasContext.fillStyle="grey";
+                canvasContext.fillRect(j*(length/8),i*(length/8),(length/8),(length/8));
+            }else{
+                canvasContext.fillStyle="white";
                 canvasContext.fillRect(j*(length/8),i*(length/8),(length/8),(length/8));
             }
             var piece=(field[i][j]===null)?null:field[i][j].piece;

@@ -71,7 +71,7 @@ export class Pawn extends Piece{
             }
         }
         
-        return moves.length<1?null:moves;
+        return moves;
     }
 }
 
