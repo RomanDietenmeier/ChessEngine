@@ -7,6 +7,13 @@ export class ChessBoard{
         }
     }
 
+    movePiece(move){
+        this.field[move.y][move.x]=move.piece;
+        this.field[move.piece.y][move.piece.x]=null;
+        move.piece.x=move.x;
+        move.piece.y=move.y;
+    }
+
     setDefaultField(){
         var field=[];
         field.push([new Rock('Br',0,0,this),new Knight('Bk',1,0,this),new Bishop('Bb',2,0,this),new Queen('Bq',3,0,this),new King('BK',4,0,this),new Bishop('Bb',5,0,this),new Knight('Bk',6,0,this),new Rock('Br',7,0,this)]);
@@ -45,29 +52,29 @@ export class Pawn extends Piece{
         var moves=[];
         if(this.isBlack){
             if(this.x>0 && this.y<7 && this.chessBoard.field[this.y+1][this.x-1]!==null && this.chessBoard.field[this.y+1][this.x-1].isBlack===false){
-                moves.push({x:this.x-1,y:this.y+1});
+                moves.push({x:this.x-1,y:this.y+1,piece:this});
             }
             if(this.x<7 && this.y<7 && this.chessBoard.field[this.y+1][this.x+1]!==null && this.chessBoard.field[this.y+1][this.x+1].isBlack===false){
-                moves.push({x:this.x+1,y:this.y+1});
+                moves.push({x:this.x+1,y:this.y+1,piece:this});
             }
             if(this.y<7 && this.chessBoard.field[this.y+1][this.x]===null){
-                moves.push({x:this.x,y:this.y+1});
+                moves.push({x:this.x,y:this.y+1,piece:this});
             }
             if(this.y===1 && this.chessBoard.field[this.y+1][this.x]===null && this.chessBoard.field[this.y+2][this.x]===null){
-                moves.push({x:this.x,y:this.y+2});
+                moves.push({x:this.x,y:this.y+2,piece:this});
             }
         }else{
             if(this.x>0 && this.y>0 && this.chessBoard.field[this.y-1][this.x-1]!==null && this.chessBoard.field[this.y-1][this.x-1].isBlack===true){
-                moves.push({x:this.x-1,y:this.y-1});
+                moves.push({x:this.x-1,y:this.y-1,piece:this});
             }
             if(this.x<7 && this.y>0 && this.chessBoard.field[this.y-1][this.x+1]!==null && this.chessBoard.field[this.y-1][this.x+1].isBlack===true){
-                moves.push({x:this.x+1,y:this.y-1});
+                moves.push({x:this.x+1,y:this.y-1,piece:this});
             }
             if(this.y>0 && this.chessBoard.field[this.y-1][this.x]===null){
-                moves.push({x:this.x,y:this.y-1});
+                moves.push({x:this.x,y:this.y-1,piece:this});
             }
             if(this.y===6 && this.chessBoard.field[this.y-1][this.x]===null && this.chessBoard.field[this.y-2][this.x]===null){
-                moves.push({x:this.x,y:this.y-2});
+                moves.push({x:this.x,y:this.y-2,piece:this});
             }
         }
         
@@ -83,28 +90,28 @@ export class Knight extends Piece{
     getPossibleMoves(){
         var moves=[];
         if((this.y>1 && this.x>0 )&&(this.chessBoard.field[this.y-2][this.x-1]===null || this.chessBoard.field[this.y-2][this.x-1].isBlack!==this.isBlack)){
-            moves.push({x:this.x-1,y:this.y-2});
+            moves.push({x:this.x-1,y:this.y-2,piece:this});
         }
         if((this.y>1 && this.x<7 )&&(this.chessBoard.field[this.y-2][this.x+1]===null || this.chessBoard.field[this.y-2][this.x+1].isBlack!==this.isBlack)){
-            moves.push({x:this.x+1,y:this.y-2});
+            moves.push({x:this.x+1,y:this.y-2,piece:this});
         }
         if((this.y<6 && this.x>0 )&&(this.chessBoard.field[this.y+2][this.x-1]===null || this.chessBoard.field[this.y+2][this.x-1].isBlack!==this.isBlack)){
-            moves.push({x:this.x-1,y:this.y+2});
+            moves.push({x:this.x-1,y:this.y+2,piece:this});
         }
         if((this.y<6 && this.x<7 )&&(this.chessBoard.field[this.y+2][this.x+1]===null || this.chessBoard.field[this.y+2][this.x+1].isBlack!==this.isBlack)){
-            moves.push({x:this.x+1,y:this.y+2});
+            moves.push({x:this.x+1,y:this.y+2,piece:this});
         }
         if((this.y<7 && this.x<6 )&&(this.chessBoard.field[this.y+1][this.x+2]===null || this.chessBoard.field[this.y+1][this.x+2].isBlack!==this.isBlack)){
-            moves.push({x:this.x+2,y:this.y+1});
+            moves.push({x:this.x+2,y:this.y+1,piece:this});
         }
         if((this.y>0 && this.x<6 )&&(this.chessBoard.field[this.y-1][this.x+2]===null || this.chessBoard.field[this.y-1][this.x+2].isBlack!==this.isBlack)){
-            moves.push({x:this.x+2,y:this.y-1});
+            moves.push({x:this.x+2,y:this.y-1,piece:this});
         }
         if((this.y<7 && this.x>1 )&&(this.chessBoard.field[this.y+1][this.x-2]===null || this.chessBoard.field[this.y+1][this.x-2].isBlack!==this.isBlack)){
-            moves.push({x:this.x-2,y:this.y+1});
+            moves.push({x:this.x-2,y:this.y+1,piece:this});
         }
         if((this.y>0 && this.x>1 )&&(this.chessBoard.field[this.y-1][this.x-2]===null || this.chessBoard.field[this.y-1][this.x-2].isBlack!==this.isBlack)){
-            moves.push({x:this.x-2,y:this.y-1});
+            moves.push({x:this.x-2,y:this.y-1,piece:this});
         }
         return moves;
     }
@@ -119,40 +126,40 @@ export class Rock extends Piece{
         var moves=[];
         for(var step=1;this.x+step<8;step++){
             if(this.chessBoard.field[this.y][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y});
+                moves.push({x:this.x+step,y:this.y,piece:this});
             }else{
                 if(this.chessBoard.field[this.y][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y});
+                    moves.push({x:this.x+step,y:this.y,piece:this});
                 }
                 break;
             } 
         }
         for(var step=-1;this.x+step>=0;step--){
             if(this.chessBoard.field[this.y][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y});
+                moves.push({x:this.x+step,y:this.y,piece:this});
             }else{
                 if(this.chessBoard.field[this.y][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y});
+                    moves.push({x:this.x+step,y:this.y,piece:this});
                 }
                 break;
             } 
         }
         for(var step=1;this.y+step<8;step++){
             if(this.chessBoard.field[this.y+step][this.x]===null){
-                moves.push({x:this.x,y:this.y+step});
+                moves.push({x:this.x,y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x].isBlack!==this.isBlack){
-                    moves.push({x:this.x,y:this.y+step});
+                    moves.push({x:this.x,y:this.y+step,piece:this});
                 }
                 break;
             } 
         }
         for(var step=-1;this.y+step>=0;step--){
             if(this.chessBoard.field[this.y+step][this.x]===null){
-                moves.push({x:this.x,y:this.y+step});
+                moves.push({x:this.x,y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x].isBlack!==this.isBlack){
-                    moves.push({x:this.x,y:this.y+step});
+                    moves.push({x:this.x,y:this.y+step,piece:this});
                 }
                 break;
             } 
@@ -170,40 +177,40 @@ export class Bishop extends Piece{
         var moves=[];
         for(var step=1;this.x+step<8 && this.y+step<8;step++){
             if(this.chessBoard.field[this.y+step][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y+step});
+                moves.push({x:this.x+step,y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y+step});
+                    moves.push({x:this.x+step,y:this.y+step,piece:this});
                 }
                 break;
             } 
         }
         for(var step=-1;this.x+step>=0 && this.y+step>=0;step--){
             if(this.chessBoard.field[this.y+step][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y+step});
+                moves.push({x:this.x+step,y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y+step});
+                    moves.push({x:this.x+step,y:this.y+step,piece:this});
                 }
                 break;
             } 
         }
         for(var step=1;this.x+step<8 && this.y+(-step)>=0;step++){
             if(this.chessBoard.field[this.y+(-step)][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y+(-step)});
+                moves.push({x:this.x+step,y:this.y+(-step),piece:this});
             }else{
                 if(this.chessBoard.field[this.y+(-step)][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y+(-step)});
+                    moves.push({x:this.x+step,y:this.y+(-step),piece:this});
                 }
                 break;
             } 
         }
         for(var step=1;this.x+(-step)>=0 && this.y+step<8;step++){
             if(this.chessBoard.field[this.y+step][this.x+(-step)]===null){
-                moves.push({x:this.x+(-step),y:this.y+step});
+                moves.push({x:this.x+(-step),y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x+(-step)].isBlack!==this.isBlack){
-                    moves.push({x:this.x+(-step),y:this.y+step});
+                    moves.push({x:this.x+(-step),y:this.y+step,piece:this});
                 }
                 break;
             } 
@@ -221,80 +228,80 @@ export class Queen extends Piece{
         var moves=[];
         for(var step=1;this.x+step<8;step++){
             if(this.chessBoard.field[this.y][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y});
+                moves.push({x:this.x+step,y:this.y,piece:this});
             }else{
                 if(this.chessBoard.field[this.y][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y});
+                    moves.push({x:this.x+step,y:this.y,piece:this});
                 }
                 break;
             } 
         }
         for(var step=-1;this.x+step>=0;step--){
             if(this.chessBoard.field[this.y][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y});
+                moves.push({x:this.x+step,y:this.y,piece:this});
             }else{
                 if(this.chessBoard.field[this.y][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y});
+                    moves.push({x:this.x+step,y:this.y,piece:this});
                 }
                 break;
             } 
         }
         for(var step=1;this.y+step<8;step++){
             if(this.chessBoard.field[this.y+step][this.x]===null){
-                moves.push({x:this.x,y:this.y+step});
+                moves.push({x:this.x,y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x].isBlack!==this.isBlack){
-                    moves.push({x:this.x,y:this.y+step});
+                    moves.push({x:this.x,y:this.y+step,piece:this});
                 }
                 break;
             } 
         }
         for(var step=-1;this.y+step>=0;step--){
             if(this.chessBoard.field[this.y+step][this.x]===null){
-                moves.push({x:this.x,y:this.y+step});
+                moves.push({x:this.x,y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x].isBlack!==this.isBlack){
-                    moves.push({x:this.x,y:this.y+step});
+                    moves.push({x:this.x,y:this.y+step,piece:this});
                 }
                 break;
             } 
         }
         for(var step=1;this.x+step<8 && this.y+step<8;step++){
             if(this.chessBoard.field[this.y+step][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y+step});
+                moves.push({x:this.x+step,y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y+step});
+                    moves.push({x:this.x+step,y:this.y+step,piece:this});
                 }
                 break;
             } 
         }
         for(var step=-1;this.x+step>=0 && this.y+step>=0;step--){
             if(this.chessBoard.field[this.y+step][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y+step});
+                moves.push({x:this.x+step,y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y+step});
+                    moves.push({x:this.x+step,y:this.y+step,piece:this});
                 }
                 break;
             } 
         }
         for(var step=1;this.x+step<8 && this.y+(-step)>=0;step++){
             if(this.chessBoard.field[this.y+(-step)][this.x+step]===null){
-                moves.push({x:this.x+step,y:this.y+(-step)});
+                moves.push({x:this.x+step,y:this.y+(-step),piece:this});
             }else{
                 if(this.chessBoard.field[this.y+(-step)][this.x+step].isBlack!==this.isBlack){
-                    moves.push({x:this.x+step,y:this.y+(-step)});
+                    moves.push({x:this.x+step,y:this.y+(-step),piece:this});
                 }
                 break;
             } 
         }
         for(var step=1;this.x+(-step)>=0 && this.y+step<8;step++){
             if(this.chessBoard.field[this.y+step][this.x+(-step)]===null){
-                moves.push({x:this.x+(-step),y:this.y+step});
+                moves.push({x:this.x+(-step),y:this.y+step,piece:this});
             }else{
                 if(this.chessBoard.field[this.y+step][this.x+(-step)].isBlack!==this.isBlack){
-                    moves.push({x:this.x+(-step),y:this.y+step});
+                    moves.push({x:this.x+(-step),y:this.y+step,piece:this});
                 }
                 break;
             } 
@@ -311,28 +318,28 @@ export class King extends Piece{
     getPossibleMoves(){
         var moves=[];
         if(this.x<7 && (this.chessBoard.field[this.y][this.x+1]===null || this.chessBoard.field[this.y][this.x+1].isBlack!==this.isBlack)){
-            moves.push({x: this.x+1,y:this.y});
+            moves.push({x: this.x+1,y:this.y,piece:this});
         }
         if(this.x<7 && this.y<7 && (this.chessBoard.field[this.y+1][this.x+1]===null || this.chessBoard.field[this.y+1][this.x+1].isBlack!==this.isBlack)){
-            moves.push({x: this.x+1,y:this.y+1});
+            moves.push({x: this.x+1,y:this.y+1,piece:this});
         }
         if(this.y<7 && (this.chessBoard.field[this.y+1][this.x]===null || this.chessBoard.field[this.y+1][this.x].isBlack !== this.isBlack)){
-            moves.push({x: this.x,y:this.y+1});
+            moves.push({x: this.x,y:this.y+1,piece:this});
         }
         if(this.x>0 && this.y<7 && (this.chessBoard.field[this.y+1][this.x-1]===null || this.chessBoard.field[this.y+1][this.x-1].isBlack !== this.isBlack)){
-            moves.push({x: this.x-1,y:this.y+1});
+            moves.push({x: this.x-1,y:this.y+1,piece:this});
         }
         if(this.x>0 && (this.chessBoard.field[this.y][this.x-1]===null || this.chessBoard.field[this.y][this.x-1].isBlack !== this.isBlack)){
-            moves.push({x: this.x-1,y:this.y});
+            moves.push({x: this.x-1,y:this.y,piece:this});
         }
         if(this.x>0 && this.y>0 && (this.chessBoard.field[this.y-1][this.x-1]===null || this.chessBoard.field[this.y-1][this.x-1].isBlack !== this.isBlack)){
-            moves.push({x: this.x-1,y:this.y-1});
+            moves.push({x: this.x-1,y:this.y-1,piece:this});
         }
         if(this.y>0 && (this.chessBoard.field[this.y-1][this.x]===null || this.chessBoard.field[this.y-1][this.x].isBlack !== this.isBlack)){
-            moves.push({x: this.x,y:this.y-1});
+            moves.push({x: this.x,y:this.y-1,piece:this});
         }
-        if(this.x<7 &&  this.y>0(this.chessBoard.field[this.y-1][this.x+1]===null || this.chessBoard.field[this.y-1][this.x+1].isBlack !== this.isBlack)){
-            moves.push({x: this.x+1,y:this.y-1});
+        if(this.x<7 &&  this.y>0 && (this.chessBoard.field[this.y-1][this.x+1]===null || this.chessBoard.field[this.y-1][this.x+1].isBlack !== this.isBlack)){
+            moves.push({x: this.x+1,y:this.y-1,piece:this});
         }
         return moves;
     }
