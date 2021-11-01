@@ -57,10 +57,10 @@ export class Pawn extends Piece{
                 moves.push({x:this.x,y:this.y+2});
             }
         }else{
-            if(this.x>0 && this.y>0 && this.chessBoard.field[this.y-1][this.x-1]!==null && this.chessBoard.field[this.y-1][this.x-1].isBlack===false){
+            if(this.x>0 && this.y>0 && this.chessBoard.field[this.y-1][this.x-1]!==null && this.chessBoard.field[this.y-1][this.x-1].isBlack===true){
                 moves.push({x:this.x-1,y:this.y-1});
             }
-            if(this.x<7 && this.y>0 && this.chessBoard.field[this.y-1][this.x+1]!==null && this.chessBoard.field[this.y-1][this.x+1].isBlack===false){
+            if(this.x<7 && this.y>0 && this.chessBoard.field[this.y-1][this.x+1]!==null && this.chessBoard.field[this.y-1][this.x+1].isBlack===true){
                 moves.push({x:this.x+1,y:this.y-1});
             }
             if(this.y>0 && this.chessBoard.field[this.y-1][this.x]===null){
