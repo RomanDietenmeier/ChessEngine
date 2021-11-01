@@ -1,19 +1,78 @@
-export class Piece{
-    constructor(pieceName){
-        this.piece=pieceName;
+export class ChessBoard{
+    constructor(field){
+        if(field===undefined){
+            this.setDefaultField();
+        }else{
+            this.field=field;
+        }
+    }
+
+    setDefaultField(){
+        var field=[];
+        field.push([new Piece('Br',0,0,this),new Piece('Bk',1,0,this),new Piece('Bb',2,0,this),new Piece('Bq',3,0,this),new Piece('BK',4,0,this),new Piece('Bb',5,0,this),new Piece('Bk',6,0,this),new Piece('Br',7,0,this)]);
+        field.push([new Pawn('Bp',0,1,this),new Pawn('Bp',1,1,this),new Pawn('Bp',2,1,this),new Pawn('Bp',3,1,this),new Pawn('Bp',4,1,this),new Pawn('Bp',5,1,this),new Pawn('Bp',6,1,this),new Pawn('Bp',7,1,this)]);
+        for(var i=0;i<4;i++){
+            field.push([null,null,null,null,null,null,null,null]);
+        }
+        field.push([new Pawn('Wp',0,6,this),new Pawn('Wp',1,6,this),new Pawn('Wp',2,6,this),new Pawn('Wp',3,6,this),new Pawn('Wp',4,6,this),new Pawn('Wp',5,6,this),new Pawn('Wp',6,6,this),new Pawn('Wp',7,6,this)]);
+        field.push([new Piece('Wr',0,7,this),new Piece('Wk',1,7,this),new Piece('Wb',2,7,this),new Piece('Wq',3,7,this),new Piece('WK',4,7,this),new Piece('Wb',5,7,this),new Piece('Wk',6,7,this),new Piece('Wr',7,7,this)]);
+        this.field=field;
     }
 }
 
-export function getDefaultField(){
-    var field=[];
-    field.push([new Piece('Br'),new Piece('Bk'),new Piece('Bb'),new Piece('Bq'),new Piece('BK'),new Piece('Bb'),new Piece('Bk'),new Piece('Br')]);
-    field.push([new Piece('Bp'),new Piece('Bp'),new Piece('Bp'),new Piece('Bp'),new Piece('Bp'),new Piece('Bp'),new Piece('Bp'),new Piece('Bp')]);
-    for(var i=0;i<4;i++){
-        field.push([null,null,null,null,null,null,null,null]);
+export class Piece{
+    constructor(pieceName,x,y,board){
+        this.x=x;
+        this.y=y;
+        this.chessBoard=board;
+
+        this.piece=pieceName;
+        this.hasMoved=false;
+        this.isBlack=(pieceName[0]==='B'?true:false);
     }
-    field.push([new Piece('Wp'),new Piece('Wp'),new Piece('Wp'),new Piece('Wp'),new Piece('Wp'),new Piece('Wp'),new Piece('Wp'),new Piece('Wp')]);
-    field.push([new Piece('Wr'),new Piece('Wk'),new Piece('Wb'),new Piece('Wq'),new Piece('WK'),new Piece('Wb'),new Piece('Wk'),new Piece('Wr')]);
-    return field;
+
+    getPossibleMoves(){
+        return null;
+    }
+}
+
+export class Pawn extends Piece{
+    constructor(pieceName,x,y,board){
+        super(pieceName,x,y,board);
+    }
+
+    getPossibleMoves(){
+        var moves=[];
+        if(this.isBlack){
+            if(this.x>0 && this.y<7 && this.chessBoard.field[this.y+1][this.x-1]!==null && this.chessBoard.field[this.y+1][this.x-1].isBlack===false){
+                moves.push({x:this.x-1,y:this.y+1});
+            }
+            if(this.x<7 && this.y<7 && this.chessBoard.field[this.y+1][this.x+1]!==null && this.chessBoard.field[this.y+1][this.x+1].isBlack===false){
+                moves.push({x:this.x+1,y:this.y+1});
+            }
+            if(this.y<7 && this.chessBoard.field[this.y+1][this.x]===null){
+                moves.push({x:this.x,y:this.y+1});
+            }
+            if(this.y===1 && this.chessBoard.field[this.y+1][this.x]===null && this.chessBoard.field[this.y+2][this.x]===null){
+                moves.push({x:this.x,y:this.y+2});
+            }
+        }else{
+            if(this.x>0 && this.y>0 && this.chessBoard.field[this.y-1][this.x-1]!==null && this.chessBoard.field[this.y-1][this.x-1].isBlack===false){
+                moves.push({x:this.x-1,y:this.y-1});
+            }
+            if(this.x<7 && this.y>0 && this.chessBoard.field[this.y-1][this.x+1]!==null && this.chessBoard.field[this.y-1][this.x+1].isBlack===false){
+                moves.push({x:this.x+1,y:this.y-1});
+            }
+            if(this.y>0 && this.chessBoard.field[this.y-1][this.x]===null){
+                moves.push({x:this.x,y:this.y-1});
+            }
+            if(this.y===6 && this.chessBoard.field[this.y-1][this.x]===null && this.chessBoard.field[this.y-2][this.x]===null){
+                moves.push({x:this.x,y:this.y-2});
+            }
+        }
+        
+        return moves.length<1?null:moves;
+    }
 }
 
 export function printFieldToConsole(field){

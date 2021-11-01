@@ -1,11 +1,11 @@
-import {loadPieceImages,getDefaultField,Piece,printFieldToConsole}from './Assets/index-module.js';
+import {loadPieceImages, ChessBoard}from './Assets/index-module.js';
 var wrapperDiv=document.createElement('div');
 var canvas=document.createElement('canvas');
 var canvasContext=canvas.getContext("2d");
 var piecePics=await loadPieceImages();
 const canvasLengthPercentage=0.98;
 var length=(window.innerWidth<window.innerHeight)?window.innerWidth*canvasLengthPercentage:window.innerHeight*canvasLengthPercentage;
-var field=getDefaultField();
+var chessBoard=new ChessBoard();
 wrapperDiv.style.marginLeft="auto";
 wrapperDiv.style.marginRight="auto";
 wrapperDiv.style.width=length;
@@ -19,7 +19,7 @@ canvas.style.backgroundColor="white";
 
 
 
-printFieldOnCanvas(field);
+printFieldOnCanvas(chessBoard.field);
 
 wrapperDiv.append(canvas);
 document.body.append(wrapperDiv);
@@ -27,7 +27,11 @@ canvas.onclick=(e)=>{
     const rect = canvas.getBoundingClientRect();
     const x = parseInt((e.clientX - rect.left)/(length/8));
     const y = parseInt((e.clientY - rect.top)/(length/8));
-    console.log(x,y,field[y][x]);
+    if(chessBoard.field[y][x]===null){
+        console.log(x,y,chessBoard.field[y][x]);
+    }else{
+        console.log(JSON.stringify(chessBoard.field[y][x].getPossibleMoves()));
+    }
 }
 
 window.onresize=(e)=>{
@@ -36,7 +40,7 @@ window.onresize=(e)=>{
     canvas.width=length;    
     wrapperDiv.style.width=length;
     wrapperDiv.style.height=length;
-    printFieldOnCanvas(field);
+    printFieldOnCanvas(chessBoard.field);
 }
 
 function printFieldOnCanvas(field){
