@@ -1,11 +1,12 @@
-import {loadPieceImages, ChessBoard}from './Assets/index-module.js';
+import { ChessGame } from './Assets/script/chess-game.js';
+import {loadPieceImages}from './Assets/script/index-module.js';
 var wrapperDiv=document.createElement('div');
 var canvas=document.createElement('canvas');
 var canvasContext=canvas.getContext("2d");
 var piecePics=await loadPieceImages();
 const canvasLengthPercentage=0.98;
 var length=(window.innerWidth<window.innerHeight)?window.innerWidth*canvasLengthPercentage:window.innerHeight*canvasLengthPercentage;
-var chessBoard=new ChessBoard();
+var chessGame=new ChessGame();
 var moves=[];
 wrapperDiv.style.marginLeft="auto";
 wrapperDiv.style.marginRight="auto";
@@ -20,7 +21,7 @@ canvas.style.backgroundColor="white";
 
 
 
-printFieldOnCanvas(chessBoard.field);
+printFieldOnCanvas(chessGame.field);
 
 wrapperDiv.append(canvas);
 document.body.append(wrapperDiv);
@@ -30,17 +31,17 @@ canvas.onclick=(e)=>{
     const y = parseInt((e.clientY - rect.top)/(length/8));
     for(var i=0;i<moves.length;i++){
         if(x===moves[i].x && y===moves[i].y){
-            chessBoard.movePiece(moves[i]);
-            printFieldOnCanvas(chessBoard.field);
+            chessGame.movePiece(moves[i]);
+            printFieldOnCanvas(chessGame.field);
             moves=[];
             return;
         }
     }
-    if(chessBoard.field[x][y]===null){
-        console.log(x,y,chessBoard.field[x][y]);
+    if(chessGame.field[x][y]===null){
+        console.log(x,y,chessGame.field[x][y]);
     }else{
-        moves=chessBoard.field[x][y].getPossibleMoves();
-        printFieldOnCanvas(chessBoard.field);
+        moves=chessGame.field[x][y].getPossibleMoves();
+        printFieldOnCanvas(chessGame.field);
         console.log(moves);
         moves.forEach(move => {
             canvasContext.beginPath();
@@ -63,7 +64,7 @@ window.onresize=(e)=>{
     canvas.width=length;    
     wrapperDiv.style.width=length;
     wrapperDiv.style.height=length;
-    printFieldOnCanvas(chessBoard.field);
+    printFieldOnCanvas(chessGame.field);
 }
 
 function printFieldOnCanvas(field){
@@ -76,7 +77,7 @@ function printFieldOnCanvas(field){
                 canvasContext.fillStyle="white";
                 canvasContext.fillRect(j*(length/8),i*(length/8),(length/8),(length/8));
             }
-            var piece=(field[j][i]===null)?null:field[j][i].piece;
+            var piece=(field[j][i]===null)?null:field[j][i].pieceName;
             switch(piece){
                 case 'Bp':
                     canvasContext.drawImage(piecePics.Bpawn,j*(length/8),i*(length/8),(length/8),(length/8));
