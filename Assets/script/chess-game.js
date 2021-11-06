@@ -17,6 +17,9 @@ export class ChessGame extends ChessBoard{
         
         field[move.x][move.y]=move.piece;
         field[move.piece.x][move.piece.y]=null;
+        if(move.tookEnPassant){
+            field[move.x][move.piece.y]=null;
+        }
         var tmpPieceX=move.piece.x;
         var tmpPieceY=move.piece.y;
         move.piece.x=move.x;
@@ -26,6 +29,17 @@ export class ChessGame extends ChessBoard{
             //if move legal
             this.field=field;
             this.whiteMove=!this.whiteMove;
+            if(move.enPassantPossible){
+                move.piece.enPassantPossible=move.enPassantPossible;
+                move.piece.chessBoard.enPassantAblePieces.push({piece:move.piece,TTL:1});
+            }
+            this.enPassantAblePieces.forEach((element, index) => {
+                if(element.TTL===0){
+                    element.piece.enPassantPossible=false;
+                }
+                element.TTL--;                    
+            });
+            this.enPassantAblePieces=this.enPassantAblePieces.filter(x=>x.TTL>=0);
         }else{
             move.piece.x=tmpPieceX;
             move.piece.y=tmpPieceY;

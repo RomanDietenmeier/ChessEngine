@@ -5,6 +5,7 @@ export class ChessBoard{
         }else{
             this.field=field;
         }
+        this.enPassantAblePieces=[];
     }
 
     movePiece(move){
@@ -29,10 +30,12 @@ export class ChessBoard{
 }
 
 export class Move{
-    constructor(x,y,piece){
+    constructor(x,y,piece,enPassantPossible=false,tookEnPassant=false){
         this.x=x;
         this.y=y;
         this.piece=piece;
+        this.enPassantPossible=enPassantPossible;
+        this.tookEnPassant=tookEnPassant;
     }
 }
 
@@ -55,6 +58,7 @@ export class Piece{
 export class Pawn extends Piece{
     constructor(pieceName,x,y,board){
         super(pieceName,x,y,board);
+        this.enPassantPossible=false;
     }
 
     getPossibleMoves(field=this.chessBoard.field){
@@ -70,7 +74,13 @@ export class Pawn extends Piece{
                 moves.push(new Move(this.x,this.y+1,this));
             }
             if(this.y===1 && field[this.x][this.y+1]===null && field[this.x][this.y+2]===null){
-                moves.push(new Move(this.x,this.y+2,this));
+                moves.push(new Move(this.x,this.y+2,this,true));
+            }
+            if(this.y===4 && this.x<7 && field[this.x+1][4]!==null && field[this.x+1][4].pieceName==='Wp' && field[this.x+1][4].enPassantPossible){
+                moves.push(new Move(this.x+1,this.y+1,this,false,true));
+            }
+            if(this.y===4 && this.x>0 && field[this.x-1][4]!==null && field[this.x-1][4].pieceName==='Wp' && field[this.x-1][4].enPassantPossible){
+                moves.push(new Move(this.x-1,this.y+1,this,false,true));
             }
         }else{
             if(this.x>0 && this.y>0 && field[this.x-1][this.y-1]!==null && field[this.x-1][this.y-1].isBlack===true){
@@ -83,7 +93,13 @@ export class Pawn extends Piece{
                 moves.push(new Move(this.x,this.y-1,this));
             }
             if(this.y===6 && field[this.x][this.y-1]===null && field[this.x][this.y-2]===null){
-                moves.push(new Move(this.x,this.y-2,this));
+                moves.push(new Move(this.x,this.y-2,this,true));
+            }
+            if(this.y===3 && this.x<7 && field[this.x+1][3]!==null && field[this.x+1][3].pieceName==='Bp' && field[this.x+1][3].enPassantPossible){
+                moves.push(new Move(this.x+1,this.y-1,this,false,true));
+            }
+            if(this.y===3 && this.x>0 && field[this.x-1][3]!==null && field[this.x-1][3].pieceName==='Bp' && field[this.x-1][3].enPassantPossible){
+                moves.push(new Move(this.x-1,this.y-1,this,false,true));
             }
         }
         return moves;

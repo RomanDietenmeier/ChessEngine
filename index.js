@@ -42,7 +42,7 @@ canvas.onclick=(e)=>{
     }else{
         moves=chessGame.field[x][y].getPossibleMoves();
         printFieldOnCanvas(chessGame.field);
-        console.log(moves);
+        console.log(moves,chessGame.field[x][y]);
         moves.forEach(move => {
             canvasContext.beginPath();
             canvasContext.arc(move.x*(length/8)+(length/16),move.y*(length/8)+(length/16),length/17,0,2*Math.PI);
