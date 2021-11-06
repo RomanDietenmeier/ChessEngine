@@ -39,6 +39,14 @@ export class Move{
     }
 }
 
+export class MoveCastle extends Move{
+    constructor(x,y,piece,rock,xRock,yRock){
+        super(x,y,piece);
+        this.rock=rock;
+        this.xRock=xRock;
+        this.yRock=yRock;
+    }
+}
 export class Piece{
     constructor(pieceName,x,y,board){
         this.x=x;
@@ -364,6 +372,12 @@ export class King extends Piece{
         }
         if(this.x<7 &&  this.y>0 && (field[this.x+1][this.y-1]===null || field[this.x+1][this.y-1].isBlack !== this.isBlack)){
             moves.push(new Move( this.x+1,this.y-1,this));
+        }
+        if(!this.hasMoved && field[5][this.y]===null && field[6][this.y]===null && field[7][this.y]!==null && !field[7][this.y].hasMoved){//short castle
+            moves.push(new MoveCastle(this.x+2,this.y,this,field[7][this.y],this.x+1,this.y));
+        }
+        if(!this.hasMoved && field[3][this.y]===null && field[2][this.y]===null && field[1][this.y]===null && field[0][this.y]!==null && !field[0][this.y].hasMoved){//long castle
+            moves.push(new MoveCastle(this.x-2,this.y,this,field[0][this.y],this.x-1,this.y));
         }
         return moves;
     }

@@ -1,4 +1,4 @@
-import { ChessBoard } from "./index-module.js";
+import { ChessBoard, MoveCastle } from "./index-module.js";
 
 export class ChessGame extends ChessBoard{
     constructor(field,whiteMove=true){
@@ -14,14 +14,32 @@ export class ChessGame extends ChessBoard{
 
         var field=[];
         this.field.map(x=>{field.push(x.slice())}); //copy field
+
+        var tmpPieceX,tmpPieceY;
         
         field[move.x][move.y]=move.piece;
         field[move.piece.x][move.piece.y]=null;
         if(move.tookEnPassant){
             field[move.x][move.piece.y]=null;
+        }else if(move.constructor===MoveCastle){
+            var plusOrMinus=move.x>move.piece.x?1:-1;
+            move.piece.x=4+1*plusOrMinus;
+            field[move.x][move.y]=null;
+            field[4][move.y]=null;
+            field[4+1*plusOrMinus][move.y]=move.piece;
+            if(!this.inCheck(this.whiteMove,field)){
+                field[4+1*plusOrMinus][move.y]=null;
+                field[move.x][move.y]=move.piece;
+            }else{
+                move.piece.x=4;
+                field[4][move.y]=move.piece;
+                field[4+1*plusOrMinus][move.y]=null;
+                console.error("illegal castle move!");
+                return;
+            }
         }
-        var tmpPieceX=move.piece.x;
-        var tmpPieceY=move.piece.y;
+        tmpPieceX=move.piece.x;
+        tmpPieceY=move.piece.y;
         move.piece.x=move.x;
         move.piece.y=move.y;
         //check for checks!
@@ -29,6 +47,7 @@ export class ChessGame extends ChessBoard{
             //if move legal
             this.field=field;
             this.whiteMove=!this.whiteMove;
+            move.piece.hasMoved=true;
             if(move.enPassantPossible){
                 move.piece.enPassantPossible=move.enPassantPossible;
                 move.piece.chessBoard.enPassantAblePieces.push({piece:move.piece,TTL:1});
@@ -40,6 +59,12 @@ export class ChessGame extends ChessBoard{
                 element.TTL--;                    
             });
             this.enPassantAblePieces=this.enPassantAblePieces.filter(x=>x.TTL>=0);
+            if(move.constructor===MoveCastle){
+                field[move.rock.x][move.rock.y]=null;
+                field[move.xRock][move.yRock]=move.rock;
+                move.rock.x=move.xRock;
+                move.rock.y=move.yRock;
+            }
         }else{
             move.piece.x=tmpPieceX;
             move.piece.y=tmpPieceY;
