@@ -10,6 +10,7 @@ var chessGame=new ChessGame();
 var moves=[];
 wrapperDiv.style.marginLeft="auto";
 wrapperDiv.style.marginRight="auto";
+wrapperDiv.style.textAlign="center";
 wrapperDiv.style.width=length;
 wrapperDiv.style.height=length;
 canvas.height=length;
